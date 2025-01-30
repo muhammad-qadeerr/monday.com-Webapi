@@ -27,34 +27,68 @@ namespace ApiTestProject.Services
         {
             try
             {
+                //var request = new GraphQLRequest
+                //{
+                //    Query = @"query { 
+                //        boards (ids: [3923377470]) { 
+                //            items_page (
+                //                limit: 1, 
+                //                query_params: { 
+                //                    rules: [
+                //                        { column_id: ""link7"", compare_value: [""Asad""], operator: contains_text }
+                //                    ]
+                //                }
+                //            ) { 
+                //                cursor 
+                //                items { 
+                //                    id 
+                //                    name 
+                //                    group { id title } 
+                //                    column_values { 
+                //                        id type text value 
+                //                        ... on StatusValue { 
+                //                            index text type label value 
+                //                            label_style { border color } 
+                //                        } 
+                //                    } 
+                //                } 
+                //            } 
+                //        } 
+                //    }",
+                //    Variables = new { }
+                //};
+
                 var request = new GraphQLRequest
                 {
                     Query = @"query { 
-                        boards (ids: [3923377470]) { 
-                            items_page (
-                                limit: 1, 
-                                query_params: { 
-                                    rules: [
-                                        { column_id: ""link7"", compare_value: [""4181:""], operator: contains_text }
-                                    ]
-                                }
-                            ) { 
-                                cursor 
-                                items { 
-                                    id 
-                                    name 
-                                    group { id title } 
-                                    column_values { 
-                                        id type text value 
-                                        ... on StatusValue { 
-                                            index text type label value 
-                                            label_style { border color } 
+                            boards (ids: [3923377470]) { 
+                                items_page (
+                                    limit: 10, 
+                                    query_params: { 
+                                        operator: or, 
+                                        rules: [
+                                            { column_id: ""link7"", compare_value: ""4528"", operator: contains_text },
+                                            { column_id: ""link7"", compare_value: ""Komal"", operator: contains_text },
+                                            { column_id: ""link7"", compare_value: ""Two"", operator: contains_text }
+                                        ]
+                                    }
+                                ) { 
+                                    cursor 
+                                    items { 
+                                        id 
+                                        name 
+                                        group { id title } 
+                                        column_values { 
+                                            id type text value 
+                                            ... on StatusValue { 
+                                                index text type label value 
+                                                label_style { border color } 
+                                            } 
                                         } 
                                     } 
                                 } 
                             } 
-                        } 
-                    }",
+                        }",
                     Variables = new { }
                 };
 
@@ -72,7 +106,7 @@ namespace ApiTestProject.Services
                 if (ex.StatusCode != System.Net.HttpStatusCode.InternalServerError)
                     _logger.LogError(ex, $"MondayBoard GraphQL Exception in GetItemsFromBoard: {ex.StatusCode} => {ex.Content}");
 
-                return null;
+                return new List<Item>();
             }
             catch (Exception e)
             {
